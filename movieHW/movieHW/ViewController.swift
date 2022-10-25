@@ -1,15 +1,10 @@
-//
-//  ViewController.swift
-//  movieHW
-//
-//  Created by Александр Троицкий on 25.10.2022.
-//
+// ViewController.swift
+// Copyright © RoadMap. All rights reserved.
 
 import UIKit
 
 /// ViewController
 class ViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
     }
