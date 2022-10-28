@@ -136,13 +136,12 @@ final class DetailViewController: UIViewController {
         movieRatingLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
         movieRatingLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
-    
+
     private func setupScrollView() {
         scrollView.addSubview(watchButton)
         scrollView.addSubview(movieImageView)
         scrollView.addSubview(movieDescriptionLabel)
         scrollView.addSubview(movieRatingLabel)
-
     }
 
     private func setupView() {
