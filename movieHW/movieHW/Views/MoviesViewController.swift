@@ -94,7 +94,7 @@ final class MoviesViewController: UIViewController {
         addTargets()
         setupNavigationBar()
     }
-    
+
     private func addTargets() {
         refresherControl.addTarget(self, action: #selector(handleRefreshAction), for: .valueChanged)
     }
@@ -198,7 +198,7 @@ final class MoviesViewController: UIViewController {
         view.addSubview(tableView)
         view.backgroundColor = UIColor(named: Colors.defaultBlack)
     }
-    
+
     private func setupNavigationBar() {
         let backButtonItem = UIBarButtonItem()
         backButtonItem.tintColor = .orange
@@ -227,7 +227,7 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
             ratingInfo: "\(Constants.ratingText)\(movies[indexPath.section].voteAverage)",
             titleText: movies[indexPath.section].title
         )
-        
+
         navigationController?.pushViewController(detailVC, animated: true)
     }
 

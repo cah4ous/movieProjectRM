@@ -77,9 +77,9 @@ final class MovieTableViewCell: UITableViewCell {
         movieRatingLabel.layer.cornerRadius = 15
         movieRatingLabel.textColor = .black
         movieRatingLabel.textAlignment = .center
-        
+
         movieRatingLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+
         movieRatingLabel.leftAnchor.constraint(equalTo: movieImageView.leftAnchor, constant: 10).isActive = true
         movieRatingLabel.bottomAnchor.constraint(equalTo: movieImageView.bottomAnchor, constant: -10).isActive = true
         movieRatingLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
@@ -90,9 +90,9 @@ final class MovieTableViewCell: UITableViewCell {
         movieDescriptionLabel.numberOfLines = 0
         movieDescriptionLabel.textAlignment = .center
         movieDescriptionLabel.font = UIFont.systemFont(ofSize: 16)
-        
+
         movieDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+
         movieDescriptionLabel.leftAnchor.constraint(equalTo: movieView.leftAnchor, constant: 10).isActive = true
         movieDescriptionLabel.rightAnchor.constraint(equalTo: movieView.rightAnchor, constant: -10).isActive = true
         movieDescriptionLabel.topAnchor.constraint(equalTo: movieNameLabel.bottomAnchor, constant: 10).isActive = true
@@ -105,9 +105,9 @@ final class MovieTableViewCell: UITableViewCell {
         movieNameLabel.textColor = .black
         movieNameLabel.numberOfLines = 2
         movieNameLabel.adjustsFontSizeToFitWidth = true
-        
+
         movieNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+
         movieNameLabel.leftAnchor.constraint(equalTo: movieView.leftAnchor, constant: 10).isActive = true
         movieNameLabel.rightAnchor.constraint(equalTo: movieView.rightAnchor, constant: -10).isActive = true
         movieNameLabel.topAnchor.constraint(equalTo: movieView.topAnchor, constant: 20).isActive = true
@@ -116,24 +116,24 @@ final class MovieTableViewCell: UITableViewCell {
 
     private func createMovieView() {
         movieView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         movieView.leftAnchor.constraint(equalTo: movieImageView.rightAnchor, constant: 0).isActive = true
         movieView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 0).isActive = true
         movieView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -10).isActive = true
         movieView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
         movieView.backgroundColor = UIColor(named: Constants.defaultOrange)
-        
+
         movieView.addSubview(movieNameLabel)
         movieView.addSubview(movieDescriptionLabel)
     }
-    
+
     private func setupContentView() {
         contentView.layer.cornerRadius = 15
         contentView.layer.masksToBounds = true
 
         contentView.layer.borderColor = UIColor.white.cgColor
         contentView.layer.borderWidth = 1
-        
+
         contentView.addSubview(movieImageView)
         contentView.addSubview(movieView)
     }
