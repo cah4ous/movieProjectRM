@@ -3,12 +3,12 @@
 
 import Foundation
 
-// Movie
+// Модель Movie
 struct Movie: Decodable {
     let results: [Results]
 }
 
-// Result
+// Модель получаемого запроса для Movie
 struct Results: Decodable {
     let id: Int
     let originalLanguage: String

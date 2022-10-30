@@ -12,7 +12,6 @@ final class MoviesViewController: UIViewController {
         static let soonButtonText = "Скоро"
         static let popularButtonText = "Популярное"
         static let bestButtonText = "Лучшее"
-        static let ratingText = "Оценка пользователей - "
     }
 
     private enum CellIdentifier {
@@ -31,7 +30,6 @@ final class MoviesViewController: UIViewController {
             "https://api.themoviedb.org/3/movie/top_rated?api_key=c4c9f43f1e9f5412ba0efa79f720438e&language=en-US&page=1"
         static let soonUrlString =
             "https://api.themoviedb.org/3/movie/upcoming?api_key=c4c9f43f1e9f5412ba0efa79f720438e&language=en-US&page=1"
-        static let firstPathOfUrlString = "https://image.tmdb.org/t/p/w200/"
     }
 
     // MARK: Private Visual Components
@@ -45,11 +43,11 @@ final class MoviesViewController: UIViewController {
     }
 
     private let request = MovieRequest()
-    private var tableView = UITableView()
-    private var popularButton = UIButton(type: .system)
-    private var topRatedButton = UIButton(type: .system)
-    private var comingSoonButton = UIButton(type: .system)
     private let refresherControl = UIRefreshControl()
+    private let tableView = UITableView()
+    private let popularButton = UIButton(type: .system)
+    private let topRatedButton = UIButton(type: .system)
+    private let comingSoonButton = UIButton(type: .system)
 
     // MARK: - Lifecycle
 
@@ -65,27 +63,19 @@ final class MoviesViewController: UIViewController {
     }
 
     @objc private func topRatedButtonAction() {
-        loadMovies(
-            urlString: UrlStrings.topRatedUrlString
-        )
+        loadMovies(urlString: UrlStrings.topRatedUrlString)
     }
 
     @objc private func comingSoonButtonAction() {
-        loadMovies(
-            urlString: UrlStrings.soonUrlString
-        )
+        loadMovies(urlString: UrlStrings.soonUrlString)
     }
 
     @objc private func popularButtonAction() {
-        loadMovies(
-            urlString: UrlStrings.popularUrlString
-        )
+        loadMovies(urlString: UrlStrings.popularUrlString)
     }
 
     private func initMethods() {
-        loadMovies(
-            urlString: UrlStrings.popularUrlString
-        )
+        loadMovies(urlString: UrlStrings.popularUrlString)
         createTopRatedButton()
         createCommingSoonButton()
         createPopularButton()
@@ -93,25 +83,25 @@ final class MoviesViewController: UIViewController {
         createTableViewSettings()
         addTargets()
         setupNavigationBar()
+        createConstraints()
     }
 
     private func addTargets() {
         refresherControl.addTarget(self, action: #selector(handleRefreshAction), for: .valueChanged)
     }
 
+    private func createConstraints() {
+        createTableViewConstraints()
+        createPopularButtonConstraints()
+        createTopRatedButtonConstraints()
+        createCommingSoonButtonConstraints()
+    }
+
     private func createPopularButton() {
-        view.addSubview(popularButton)
         popularButton.setTitle(Constants.popularButtonText, for: .normal)
         popularButton.titleLabel?.adjustsFontSizeToFitWidth = true
         popularButton.backgroundColor = UIColor(named: Colors.defaultOrange)
         popularButton.setTitleColor(UIColor.white, for: .normal)
-        popularButton.translatesAutoresizingMaskIntoConstraints = false
-
-        popularButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15).isActive = true
-        popularButton.widthAnchor.constraint(equalToConstant: 100.0).isActive = true
-        popularButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
-        popularButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-
         popularButton.layer.cornerRadius = 9
         popularButton.layer.borderColor = UIColor.white.cgColor
         popularButton.layer.borderWidth = 1.0
@@ -119,21 +109,20 @@ final class MoviesViewController: UIViewController {
         popularButton.addTarget(self, action: #selector(popularButtonAction), for: .touchUpInside)
     }
 
+    private func createPopularButtonConstraints() {
+        popularButton.translatesAutoresizingMaskIntoConstraints = false
+
+        popularButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15).isActive = true
+        popularButton.widthAnchor.constraint(equalToConstant: 100.0).isActive = true
+        popularButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+        popularButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+    }
+
     private func createTopRatedButton() {
-        view.addSubview(topRatedButton)
         topRatedButton.setTitle(Constants.bestButtonText, for: .normal)
         topRatedButton.setTitleColor(UIColor.white, for: .normal)
         topRatedButton.titleLabel?.adjustsFontSizeToFitWidth = true
         topRatedButton.backgroundColor = UIColor(named: Colors.defaultOrange)
-
-        topRatedButton.translatesAutoresizingMaskIntoConstraints = false
-
-        topRatedButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -15)
-            .isActive = true
-        topRatedButton.widthAnchor.constraint(equalToConstant: 100.0).isActive = true
-        topRatedButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
-        topRatedButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-
         topRatedButton.layer.cornerRadius = 9
         topRatedButton.layer.borderColor = UIColor.white.cgColor
         topRatedButton.layer.borderWidth = 1.0
@@ -141,11 +130,29 @@ final class MoviesViewController: UIViewController {
         topRatedButton.addTarget(self, action: #selector(topRatedButtonAction), for: .touchUpInside)
     }
 
+    private func createTopRatedButtonConstraints() {
+        topRatedButton.translatesAutoresizingMaskIntoConstraints = false
+
+        topRatedButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -15)
+            .isActive = true
+        topRatedButton.widthAnchor.constraint(equalToConstant: 100.0).isActive = true
+        topRatedButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+        topRatedButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+    }
+
     private func createCommingSoonButton() {
-        view.addSubview(comingSoonButton)
         comingSoonButton.setTitle(Constants.soonButtonText, for: .normal)
         comingSoonButton.titleLabel?.adjustsFontSizeToFitWidth = true
         comingSoonButton.backgroundColor = UIColor(named: Colors.defaultOrange)
+        comingSoonButton.setTitleColor(UIColor.white, for: .normal)
+        comingSoonButton.layer.cornerRadius = 9
+        comingSoonButton.layer.borderColor = UIColor.white.cgColor
+        comingSoonButton.layer.borderWidth = 1.0
+
+        comingSoonButton.addTarget(self, action: #selector(comingSoonButtonAction), for: .touchUpInside)
+    }
+
+    private func createCommingSoonButtonConstraints() {
         comingSoonButton.translatesAutoresizingMaskIntoConstraints = false
 
         comingSoonButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
@@ -153,13 +160,6 @@ final class MoviesViewController: UIViewController {
         comingSoonButton.widthAnchor.constraint(equalToConstant: 100.0).isActive = true
         comingSoonButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         comingSoonButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-        comingSoonButton.setTitleColor(UIColor.white, for: .normal)
-
-        comingSoonButton.layer.cornerRadius = 9
-        comingSoonButton.layer.borderColor = UIColor.white.cgColor
-        comingSoonButton.layer.borderWidth = 1.0
-
-        comingSoonButton.addTarget(self, action: #selector(comingSoonButtonAction), for: .touchUpInside)
     }
 
     private func createTableViewSettings() {
@@ -172,12 +172,15 @@ final class MoviesViewController: UIViewController {
             forCellReuseIdentifier: CellIdentifier.movieCellIdentifier
         )
 
+        tableView.separatorStyle = .none
+    }
+
+    private func createTableViewConstraints() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0).isActive = true
         tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 75).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
-        tableView.separatorStyle = .none
     }
 
     private func loadMovies(urlString: String) {
@@ -195,6 +198,9 @@ final class MoviesViewController: UIViewController {
     }
 
     private func configureView() {
+        view.addSubview(popularButton)
+        view.addSubview(topRatedButton)
+        view.addSubview(comingSoonButton)
         view.addSubview(tableView)
         view.backgroundColor = UIColor(named: Colors.defaultBlack)
     }
@@ -221,12 +227,7 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = DetailViewController()
-        detailVC.createImages(
-            urlString: "\(UrlStrings.firstPathOfUrlString)\(movies[indexPath.section].posterPath)",
-            descriptionInfo: movies[indexPath.section].overview,
-            ratingInfo: "\(Constants.ratingText)\(movies[indexPath.section].voteAverage)",
-            titleText: movies[indexPath.section].title
-        )
+        detailVC.createImages(movie: movies[indexPath.section])
 
         navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -235,13 +236,7 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
         guard let movieCell = tableView
             .dequeueReusableCell(withIdentifier: CellIdentifier.movieCellIdentifier)
             as? MovieTableViewCell else { return UITableViewCell() }
-
-        movieCell.createImages(
-            urlString: "\(UrlStrings.firstPathOfUrlString)\(movies[indexPath.section].posterPath)",
-            descriptionInfo: movies[indexPath.section].overview,
-            ratingInfo: "\(movies[indexPath.section].voteAverage)",
-            titleText: movies[indexPath.section].title
-        )
+        movieCell.createImages(movie: movies[indexPath.section])
 
         return movieCell
     }

@@ -10,18 +10,20 @@ final class DetailViewController: UIViewController {
     private enum Constants {
         static let defaultBlack = "defaultBlack"
         static let defaultOrange = "defaultOrange"
-        static let watch = "Смотреть"
+        static let watchText = "Смотреть"
         static let shareButtonImageName = "square.and.arrow.up"
         static let clearString = ""
+        static let ratingText = "Оценка пользователей - "
+        static let firstPathOfUrlString = "https://image.tmdb.org/t/p/w200/"
     }
 
     // MARK: Private Visual Components
 
-    private var movieImageView = UIImageView()
-    private var movieDescriptionLabel = UILabel()
-    private var watchButton = UIButton(type: .system)
-    private var scrollView = UIScrollView()
-    private var movieRatingLabel = UILabel()
+    private let movieImageView = UIImageView()
+    private let movieDescriptionLabel = UILabel()
+    private let watchButton = UIButton(type: .system)
+    private let scrollView = UIScrollView()
+    private let movieRatingLabel = UILabel()
 
     // MARK: - Private Properties
 
@@ -36,13 +38,19 @@ final class DetailViewController: UIViewController {
 
     // MARK: - Public Methods
 
-    func createImages(urlString: String, descriptionInfo: String, ratingInfo: String, titleText: String) {
-        guard let url = URL(string: urlString) else { return }
-        guard let data = try? Data(contentsOf: url) else { return }
+    func createImages(movie: Results) {
+        let urlString = "\(Constants.firstPathOfUrlString)\(movie.posterPath)"
+        guard
+            let url = URL(string: urlString),
+            let data = try? Data(contentsOf: url)
+        else {
+            return
+        }
+
+        movieDescriptionLabel.text = movie.overview
+        movieRatingLabel.text = "\(Constants.ratingText)\(movie.voteAverage)"
+        movieTitle = movie.title
         movieImageView.image = UIImage(data: data)
-        movieDescriptionLabel.text = descriptionInfo
-        movieRatingLabel.text = ratingInfo
-        movieTitle = titleText
     }
 
     // MARK: - Private Methods
@@ -60,60 +68,75 @@ final class DetailViewController: UIViewController {
         setupScrollView()
         setupView()
         setupNavigationBar()
-        setConstraints()
-    }
-
-    private func setConstraints() {
         setMovieImageView()
         setMovieDescriptionLabel()
         setWatchButton()
         setScrollView()
         setRatingLabel()
+        setConstraints()
+    }
+
+    private func setConstraints() {
+        createRatingLabelConstraints()
+        createWatchButtonConstraints()
+        createMovieImageViewConstraints()
+        createScrollViewConstraints()
+        createRatingLabelConstraints()
+        createMovieDescriptionLabelConstraints()
     }
 
     private func setWatchButton() {
         watchButton.translatesAutoresizingMaskIntoConstraints = false
 
-        watchButton.setTitle(Constants.watch, for: .normal)
+        watchButton.setTitle(Constants.watchText, for: .normal)
         watchButton.titleLabel?.adjustsFontSizeToFitWidth = true
         watchButton.backgroundColor = UIColor(named: Constants.defaultOrange)
         watchButton.setTitleColor(UIColor.white, for: .normal)
+        watchButton.layer.cornerRadius = 9
+        watchButton.layer.borderColor = UIColor.white.cgColor
+        watchButton.layer.borderWidth = 1.0
+    }
 
+    private func createWatchButtonConstraints() {
         watchButton.translatesAutoresizingMaskIntoConstraints = false
 
         watchButton.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 10).isActive = true
         watchButton.topAnchor.constraint(equalTo: movieImageView.bottomAnchor, constant: 20).isActive = true
         watchButton.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -20).isActive = true
         watchButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-
-        watchButton.layer.cornerRadius = 9
-        watchButton.layer.borderColor = UIColor.white.cgColor
-        watchButton.layer.borderWidth = 1.0
     }
 
     private func setMovieImageView() {
+        movieImageView.contentMode = .scaleToFill
+    }
+
+    private func createMovieImageViewConstraints() {
         movieImageView.translatesAutoresizingMaskIntoConstraints = false
 
         movieImageView.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 0).isActive = true
         movieImageView.widthAnchor.constraint(equalToConstant: view.bounds.width).isActive = true
         movieImageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
         movieImageView.heightAnchor.constraint(equalToConstant: 460).isActive = true
-        movieImageView.contentMode = .scaleToFill
     }
 
     private func setScrollView() {
+        scrollView.backgroundColor = UIColor(named: Constants.defaultBlack)
+    }
+
+    private func createScrollViewConstraints() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
 
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         scrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         scrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 100).isActive = true
-        scrollView.backgroundColor = UIColor(named: Constants.defaultBlack)
     }
 
     private func setMovieDescriptionLabel() {
         movieDescriptionLabel.numberOfLines = 0
+    }
 
+    private func createMovieDescriptionLabelConstraints() {
         movieDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
 
         movieDescriptionLabel.topAnchor.constraint(equalTo: movieRatingLabel.bottomAnchor, constant: 15).isActive = true
@@ -127,7 +150,9 @@ final class DetailViewController: UIViewController {
         movieRatingLabel.font = .boldSystemFont(ofSize: 25)
         movieRatingLabel.textColor = UIColor.white
         movieRatingLabel.textAlignment = .center
+    }
 
+    private func createRatingLabelConstraints() {
         movieRatingLabel.translatesAutoresizingMaskIntoConstraints = false
 
         movieRatingLabel.topAnchor.constraint(equalTo: watchButton.bottomAnchor, constant: 10).isActive = true
